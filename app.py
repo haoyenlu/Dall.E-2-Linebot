@@ -7,7 +7,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
+    MessageEvent, TextMessage, TextSendMessage, ImageSendMessage
 )
 
 import os
@@ -53,7 +53,7 @@ def generate_image(prompt,number = 1,size="512x512"):
 def handle_message(event):
     images_url = generate_image(prompt = event.message.text)
     image_messages = []
-    for i in len(images_url):
+    for i in range(len(images_url)):
         image_messages.append(ImageSendMessage(
             original_content = images_url[i],
             preview_content = images_url[i]
