@@ -5,7 +5,7 @@ A Line bot combine with OpenAI Dall.E 2 to generate image.
 #### QR code
 ##### Use this QR code to add line bot to friend <br>
 <br>
-![螢幕擷取畫面 2023-03-13 203417](https://user-images.githubusercontent.com/74141558/224867554-137963d1-c6b7-4415-9040-c1d1a1815c50.png)
+<img src="https://user-images.githubusercontent.com/74141558/224867554-137963d1-c6b7-4415-9040-c1d1a1815c50.png" width="300" height="300/>
 ---
 #### Demo
 <img src = "https://user-images.githubusercontent.com/74141558/224868469-1a506aa4-4e3e-4614-be2d-65065dcaf6ad.jpg" width="250" height="250" />
