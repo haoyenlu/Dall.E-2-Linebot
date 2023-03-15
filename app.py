@@ -104,9 +104,9 @@ def handle_message(event):
 
 
     else:
-        images_url = generate_image(prompt = event.message.text,number=users_info[event.source.user_id]["number"])
 
         try:
+            images_url = generate_image(prompt = event.message.text,number=users_info[event.source.user_id]["number"])
             image_carousel_columns = []
             for i in range(len(images_url)):
                 image_carousel_columns.append(
