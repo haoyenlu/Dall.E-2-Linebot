@@ -65,7 +65,7 @@ def generate_image(prompt,number,size="512x512"):
         return images_url
     
     except InvalidRequestError as e:
-        raise Exception(e)
+        return Exception(e)
     
 
 
