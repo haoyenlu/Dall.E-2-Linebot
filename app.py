@@ -8,7 +8,7 @@ from linebot.exceptions import (
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage, ImageSendMessage, FollowEvent , ConfirmTemplate, MessageAction ,
-    TemplateSendMessage, ButtonsTemplate , ImageCarouselColumn ,ImageCarouselTemplate
+    TemplateSendMessage, ButtonsTemplate , ImageCarouselColumn ,ImageCarouselTemplate, URIAction
 )
 
 import os
@@ -102,7 +102,8 @@ def handle_message(event):
         image_carousel_columns = []
         for i in range(len(images_url)):
             image_carousel_columns.append(
-                ImageCarouselColumn(image_url=images_url[i],action=None)
+                ImageCarouselColumn(image_url=images_url[i],
+                                    action=URIAction(label="image url",uri=images_url[i]))
             )
 
         image_carousel_template = ImageCarouselTemplate(columns=image_carousel_columns)
