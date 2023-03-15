@@ -8,7 +8,7 @@ from linebot.exceptions import (
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage, ImageSendMessage, FollowEvent , ConfirmTemplate, MessageAction ,
-    TemplateSendMessage
+    TemplateSendMessage, ButtonsTemplate
 )
 
 import os
@@ -77,7 +77,7 @@ def handle_follow(event):
 def handle_message(event):
     
     if event.message.text == "指令" or event.message.text == "command":
-        command_template = ConfirmTemplate(text="How may images do you want?",actions=[
+        command_template = ButtonsTemplate(title="Specify images number",text="How may images do you want?",actions=[
             MessageAction(label="1",text="1"),
             MessageAction(label="2",text="2"),
             MessageAction(label="3",text="3"),
