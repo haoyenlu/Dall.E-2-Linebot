@@ -102,11 +102,11 @@ def handle_message(event):
         image_carousel_columns = []
         for i in range(len(images_url)):
             image_carousel_columns.append(
-                ImageCarouselColumn(image_url=images_url[i])
+                ImageCarouselColumn(image_url=images_url[i],action=None)
             )
 
         image_carousel_template = ImageCarouselTemplate(columns=image_carousel_columns)
-        
+
         line_bot_api.reply_message(event.reply_token,TemplateSendMessage(
             alt_text="image carousel template",template=image_carousel_template))
     return 'OK'
