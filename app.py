@@ -75,6 +75,9 @@ def handle_follow(event):
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+
+    if not users_info.has_key(event.source.user_id):
+        users_info[event.source.user_id]["number"] = 1
     
     if event.message.text == "指令" or event.message.text == "command":
         command_template = ButtonsTemplate(title="Specify images number",text="How may images do you want?",actions=[
@@ -87,8 +90,13 @@ def handle_message(event):
             alt_text="Command actions",template=command_template
         ))
 
+    elif event.message.text.isnumeric() and int(event.message.text) <= 4 and int(event.message.text) >= 1:
+        users_info[event.source.user_id]["number"] = int(event.message.text)
+        line_bot_api.reply_message(event.reply_token,TextSendMessage(text=f"OK! I will send you {event.message.text} images."))
+
+
     else:
-        images_url = generate_image(prompt = event.message.text)
+        images_url = generate_image(prompt = event.message.text,number=users_info[event.source.user_id]["number"])
         image_messages = []
         for i in range(len(images_url)):
             image_messages.append(ImageSendMessage(
