@@ -65,7 +65,7 @@ def generate_image(prompt,number,size="512x512"):
         return images_url
     
     except InvalidRequestError as e:
-        raise InvalidRequestError(e)
+        raise Exception(e)
     
 
 
@@ -121,7 +121,7 @@ def handle_message(event):
             
         except InvalidRequestError as e:
             line_bot_api.reply_message(event.reply_token,TextSendMessage(text=e))
-            
+
     return 'OK'
 
 
