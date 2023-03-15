@@ -99,17 +99,14 @@ def handle_message(event):
     else:
         images_url = generate_image(prompt = event.message.text,number=users_info[event.source.user_id]["number"])
 
-        image_carousel_columns = []
+        image_messages = []
         for i in range(len(images_url)):
-            image_carousel_columns.append(
-                ImageCarouselColumn(image_url=images_url[i],
-                                    action=URIAction(label="image uri",uri=images_url[i]))
+            image_messages.append(
+                ImageSendMessage(original_content_url=images_url[i],
+                                 preview_image_url=images_url[i])
             )
 
-        image_carousel_template = ImageCarouselTemplate(columns=image_carousel_columns)
-
-        line_bot_api.reply_message(event.reply_token,TemplateSendMessage(
-            alt_text="image carousel template",template=image_carousel_template))
+        line_bot_api.reply_message(event.reply_token,image_messages)
     return 'OK'
 
 
