@@ -54,7 +54,7 @@ def callback():
     return 'OK'
 
 
-def generate_image(prompt,number = 1,size="512x512"):
+def generate_image(prompt,number,size="512x512"):
     image_resp = openai.Image.create(prompt=prompt, n = number,size=size)
     images_url = []
     for i in range(number):
@@ -103,7 +103,7 @@ def handle_message(event):
         for i in range(len(images_url)):
             image_carousel_columns.append(
                 ImageCarouselColumn(image_url=images_url[i],
-                                    action=URIAction(label="image url",uri=images_url[i]))
+                                    action=URIAction(label="image uri",uri=images_url[i]))
             )
 
         image_carousel_template = ImageCarouselTemplate(columns=image_carousel_columns)
