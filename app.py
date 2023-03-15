@@ -25,7 +25,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 users_info = dict()
 
-@app.rout("/",methods=['GET'])
+@app.route("/",methods=['GET'])
 def root():
     return 'OK'
 
