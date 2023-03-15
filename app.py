@@ -119,7 +119,7 @@ def handle_message(event):
             line_bot_api.reply_message(event.reply_token,TemplateSendMessage(
                 alt_text="image carousel template",template=image_carousel_template))
             
-        except InvalidRequestError as e:
+        except Exception as e:
             line_bot_api.reply_message(event.reply_token,TextSendMessage(text=e))
 
     return 'OK'
