@@ -65,7 +65,7 @@ def generate_image(prompt,number,size="512x512"):
         return images_url
     
     except InvalidRequestError as e:
-        return Exception(e)
+        raise Exception(e)
     
 
 
@@ -106,10 +106,7 @@ def handle_message(event):
     else:
         images_url = generate_image(prompt = event.message.text,number=users_info[event.source.user_id]["number"])
 
-        if type(images_url) is Exception:
-            line_bot_api.reply_message(event.reply_token,TextSendMessage(text=images_url))
-
-        else:
+        try:
             image_carousel_columns = []
             for i in range(len(images_url)):
                 image_carousel_columns.append(
@@ -121,6 +118,9 @@ def handle_message(event):
 
             line_bot_api.reply_message(event.reply_token,TemplateSendMessage(
                 alt_text="image carousel template",template=image_carousel_template))
+            
+        except Exception as e:
+            line_bot_api.reply_message(event.reply_token,TextSendMessage(text=str(e)))
         
 
     return 'OK'
