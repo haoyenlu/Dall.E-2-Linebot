@@ -77,6 +77,7 @@ def handle_follow(event):
 def handle_message(event):
 
     if event.source.user_id not in users_info:
+        users_info[event.source.user_id] = {}
         users_info[event.source.user_id]["number"] = 1
     
     if event.message.text == "指令" or event.message.text == "command":
