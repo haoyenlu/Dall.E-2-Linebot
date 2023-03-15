@@ -4,10 +4,11 @@ from linebot import (
     LineBotApi, WebhookHandler
 )
 from linebot.exceptions import (
-    InvalidSignatureError
+    InvalidSignatureError , LineBotApiError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, ImageSendMessage
+    MessageEvent, TextMessage, TextSendMessage, ImageSendMessage, FollowEvent , ConfirmTemplate, MessageAction ,
+    TemplateSendMessage
 )
 
 import os
@@ -21,6 +22,13 @@ handler = WebhookHandler(os.getenv("CHANNEL_SECRET"))
 import openai
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+users_info = dict()
+
+@app.rout("/",methods=['GET'])
+def root():
+    return 'OK'
+
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -37,6 +45,11 @@ def callback():
     except InvalidSignatureError:
         print("Invalid signature. Please check your channel access token/channel secret.")
         abort(400)
+    except LineBotApiError as e:
+        print("Got exception from LINE Messaging API: %s\n" % e.message)
+        for m in e.error.details:
+            print(" %s: %s" % (m.property,m.message))
+        print("\n")
 
     return 'OK'
 
@@ -49,17 +62,41 @@ def generate_image(prompt,number = 1,size="512x512"):
     return images_url
 
 
+Welcome_Message = "Hi!\nYou can type in any message and I will generate images for you\n"    
+
+@handler.add(FollowEvent)
+def handle_follow(event):
+    app.logger.info("Got follow event:" + event.source.user_id)
+    users_info[event.source.user_id]["number"] = 1
+
+    line_bot_api.reply_message(
+        event.reply_token, TextSendMessage(text=Welcome_Message)
+    )
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    images_url = generate_image(prompt = event.message.text)
-    image_messages = []
-    for i in range(len(images_url)):
-        image_messages.append(ImageSendMessage(
-            original_content_url = images_url[i],
-            preview_image_url = images_url[i]
+    
+    if event.message.text == "指令" or event.message.text == "command":
+        command_template = ConfirmTemplate(text="How may images do you want?",actions=[
+            MessageAction(label="1",text="1"),
+            MessageAction(label="2",text="2"),
+            MessageAction(label="3",text="3"),
+            MessageAction(label="4",text="4")
+        ])
+        line_bot_api.reply_message(event.reply_token,TemplateSendMessage(
+            alt_text="Command actions",template=command_template
         ))
-    line_bot_api.reply_message(event.reply_token,image_messages)
-    return 0
+
+    else:
+        images_url = generate_image(prompt = event.message.text)
+        image_messages = []
+        for i in range(len(images_url)):
+            image_messages.append(ImageSendMessage(
+                original_content_url = images_url[i],
+                preview_image_url = images_url[i]
+            ))
+        line_bot_api.reply_message(event.reply_token,image_messages)
+    return 'OK'
 
 
 if __name__ == "__main__":
