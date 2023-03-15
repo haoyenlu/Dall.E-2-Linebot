@@ -61,7 +61,7 @@ def generate_image(prompt,number,size="512x512"):
         image_resp = openai.Image.create(prompt=prompt, n = number,size=size)
         images_url = []
         for i in range(number):
-            images_url.append(image_resp["data"][i].url)
+            images_url.append(image_resp["data"][i]["url"])
         return images_url
     
     except InvalidRequestError as e:
